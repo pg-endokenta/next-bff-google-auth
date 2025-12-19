@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
       picture: payload.picture,
     });
 
-    const redirectUrl = storedState.returnTo ?? '/';
+    const redirectUrl = new URL(storedState.returnTo ?? '/', request.nextUrl.origin);
     const response = NextResponse.redirect(redirectUrl);
     applySessionCookie(response, token);
     clearState(response);
