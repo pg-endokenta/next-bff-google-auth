@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
   const url = new URL(request.url);
   const code = url.searchParams.get('code');
   const returnedState = url.searchParams.get('state');
-  const storedState = readState();
+  const storedState = await readState();
 
   if (!code || !returnedState) {
     return NextResponse.json({ error: 'リクエストが不正です。code/stateが不足しています。' }, { status: 400 });

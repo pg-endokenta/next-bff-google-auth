@@ -29,7 +29,7 @@ export async function createSessionToken(user: SessionUser) {
 }
 
 export async function readSessionFromCookies() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const raw = cookieStore.get(SESSION_COOKIE)?.value;
   if (!raw) return null;
 

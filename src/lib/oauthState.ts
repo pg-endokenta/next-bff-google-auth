@@ -20,8 +20,8 @@ export function persistState(response: NextResponse, state: StoredState) {
   });
 }
 
-export function readState(): StoredState | null {
-  const cookieStore = cookies();
+export async function readState(): Promise<StoredState | null> {
+  const cookieStore = await cookies();
   const raw = cookieStore.get(STATE_COOKIE)?.value;
   if (!raw) return null;
 
