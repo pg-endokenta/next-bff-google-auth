@@ -20,7 +20,8 @@ export async function GET(request: NextRequest) {
 
   try {
     const client = getOAuthClient();
-    const { tokens } = await client.getToken({ code, redirect_uri: requireEnv('GOOGLE_REDIRECT_URI') });
+    const redirectUri = requireEnv('GOOGLE_REDIRECT_URI');
+    const { tokens } = await client.getToken({ code, redirect_uri: redirectUri });
 
     if (!tokens.id_token) {
       return NextResponse.json({ error: 'IDトークンが取得できませんでした。' }, { status: 400 });
@@ -40,7 +41,8 @@ export async function GET(request: NextRequest) {
       picture: payload.picture,
     });
 
-    const redirectUrl = new URL(storedState.returnTo ?? '/', request.nextUrl.origin);
+    const redirectOrigin = new URL(redirectUri).origin;
+    const redirectUrl = new URL(storedState.returnTo ?? '/', redirectOrigin);
     const response = NextResponse.redirect(redirectUrl);
     applySessionCookie(response, token);
     clearState(response);
